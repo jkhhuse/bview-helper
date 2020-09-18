@@ -1,0 +1,11 @@
+{
+  "message-success": {
+    "prefix": "v3-init",
+    "body": [
+      "this.\\$message.success('${2:content}', '${3:[duration]}',",
+      "\t() => {}",
+      ");"
+    ],
+    "description": "vue 3 component snippets"
+  }
+}
