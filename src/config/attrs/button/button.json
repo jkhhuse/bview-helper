@@ -1,50 +1,37 @@
 {
-	"bButton/disabled": {
-		"description": "disabled state of button",
-		"optionType": "boolean",
-		"defaultValue": "false"
-	},
-	"bButton/ghost": {
-		"description": "make background transparent and invert text and border colors, added in 2.7",
-		"optionType": "boolean",
-		"defaultValue": "false"
-	},
-	"bButton/htmlType": {
-		"description": "set the original html type of button, see: MDN",
-		"optionType": "string",
-		"defaultValue": "button"
-	},
-	"bButton/icon": {
-		"description": "set the icon of button, see: Icon component",
-		"optionType": "string",
-		"defaultValue": "-"
-	},
-	"bButton/loading": {
-		"description": "set the loading status of button",
-		"optionType": "boolean | { delay: number }",
-		"defaultValue": "false"
-	},
-	"bButton/shape": {
-		"options": ["circle", "round"],
-		"description": "can be set to circle or omitted",
-		"optionType": "string",
-		"defaultValue": "-"
-	},
-	"bButton/size": {
-    "options": ["small", "large"],
-		"description": "can be set to small large or omitted",
-		"optionType": "string",
-		"defaultValue": "default"
-	},
-	"bButton/type": {
-    "options": ["primary", "ghost", "dashed", "danger"],
-		"description": "can be set to primary ghost dashed danger(added in 2.7) or omitted (meaning default)",
-		"optionType": "string",
-		"defaultValue": "default"
-	},
-	"bButton/block": {
-		"description": "option to fit button width to its parent width",
-		"optionType": "boolean",
-		"defaultValue": "false"
-	}
+  "bButton/type": {
+    "description": "按钮类型，可选择为:primary(主按钮),secondary(次按钮),error(危险按钮),text(文本按钮)",
+    "optionType": "String",
+    "defaultValue": "default"
+  },
+  "bButton/size": {
+    "description": "该属性可设置small或者不选",
+    "optionType": "String",
+    "defaultValue": "default"
+  },
+  "bButton/loading": {
+    "description": "是否为加载状态，该状态时不可点击;true或者false",
+    "optionType": "Boolean",
+    "defaultValue": "false"
+  },
+  "bButton/ghost": {
+    "description": "幽灵按钮，主要为反色",
+    "optionType": "Boolean",
+    "defaultValue": "false"
+  },
+  "bButton/long": {
+    "description": "按钮长度100%",
+    "optionType": "Boolean",
+    "defaultValue": "false"
+  },
+  "bButton/color": {
+    "description": "设置反白按钮颜色，可选为: blue (蓝色), red (红色)",
+    "optionType": "String",
+    "defaultValue": "null"
+  },
+  "bButton/custom-icon": {
+    "description": "设置图标按钮的图标, 名称参考图标库",
+    "optionType": "String",
+    "defaultValue": "'cmss-icon icon-start'"
+  }
 }

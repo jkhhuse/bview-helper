@@ -1,11 +1,62 @@
 {
-  "message-success": {
-    "prefix": "v3-init",
+  "v3-template": {
+    "prefix": "v3-template",
     "body": [
-      "this.\\$message.success('${2:content}', '${3:[duration]}',",
-      "\t() => {}",
-      ");"
+      "<template>",
+      "\t<div></div>",
+      "</template>",
+      "<script scoped lang='${1:ts}'>",
+      "import { SetupContext } from \"@vue/composition-api\"",
+      "export default {",
+      "\tname: \"App\",",
+      "\tcomponents: {",
+      "\t},",
+      "\tsetup(props: any, context: SetupContext) {",
+      "\t\treturn {};",
+      "\t},",
+      "};",
+      "<style lang=\"less\" src=\"\"></style>"
     ],
     "description": "vue 3 component snippets"
+  },
+  "bview-message-error-v3": {
+    "prefix": "message-error-v3",
+    "body": ["context.root.$Message.error(\"\");"],
+    "description": "vue 3 message error"
+  },
+  "bview-message-success-v3": {
+    "prefix": "message-success-v3",
+    "body": ["context.root.$Message.success(\"\");"],
+    "description": "vue 3 message success"
+  },
+  "bview-message-warning-v3": {
+    "prefix": "message-warning-v3",
+    "body": ["context.root.$Message.warning(\"\");"],
+    "description": "vue 3 message warning"
+  },
+  "bview-message-info-v3": {
+    "prefix": "message-info-v3",
+    "body": ["context.root.$Message.info(\"\");"],
+    "description": "vue 3 message info"
+  },
+  "bview-message-error": {
+    "prefix": "message-error",
+    "body": ["this.$Message.error(config)"],
+    "description": "vue 3 message error"
+  },
+  "bview-message-success": {
+    "prefix": "message-success",
+    "body": ["this.$Message.success(config)"],
+    "description": "vue 3 message success"
+  },
+  "bview-message-warning": {
+    "prefix": "message-warning",
+    "body": ["this.$Message.warning(config)"],
+    "description": "vue 3 message warning"
+  },
+  "bview-message-info": {
+    "prefix": "message-info",
+    "body": ["this.$Message.info(config)"],
+    "description": "vue 3 message info"
   }
 }

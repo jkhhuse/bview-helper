@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BviewCompletionItemProvider = exports.Service = exports.decodeDocsUri = exports.encodeDocsUri = void 0;
 const vscode_1 = require("vscode");
 const TAGS = require("./config/ui-tags.json");
-const ATTRS = require("./config/ui-attributes");
-const prettyHTML = require('pretty');
+const ui_attributes_1 = require("./config/ui-attributes");
+const prettyHTML = require("pretty");
 function encodeDocsUri(query) {
     return vscode_1.Uri.parse(`bview-helper://search?${JSON.stringify(query)}`);
 }
@@ -34,10 +34,10 @@ class Service {
     }
     setConfig() {
         // https://github.com/Microsoft/vscode/issues/24464
-        const config = vscode_1.workspace.getConfiguration('editor');
-        const quickSuggestions = config.get('quickSuggestions');
-        if (!quickSuggestions['strings']) {
-            config.update('quickSuggestions', { strings: true }, true);
+        const config = vscode_1.workspace.getConfiguration("editor");
+        const quickSuggestions = config.get("quickSuggestions");
+        if (!quickSuggestions["strings"]) {
+            config.update("quickSuggestions", { strings: true }, true);
         }
     }
     openHtml(query, title) {
@@ -49,15 +49,15 @@ class Service {
         // And set its HTML content
         panel.webview.html = this.getWebviewContent(query);
     }
-    openDocs(query, title = 'bview-helper', editor = vscode_1.window.activeTextEditor) {
+    openDocs(query, title = "bview-helper", editor = vscode_1.window.activeTextEditor) {
         this.openHtml(query, title);
     }
     dispose() {
         this._disposable.dispose();
     }
     getWebviewContent(query) {
-        const config = vscode_1.workspace.getConfiguration('bview-helper');
-        const linkUrl = config.get('link-url');
+        const config = vscode_1.workspace.getConfiguration("bview-helper");
+        const linkUrl = config.get("link-url");
         const path = query.path;
         const iframeSrc = `${linkUrl}/components/${path}`;
         return `
@@ -77,10 +77,10 @@ class Service {
 exports.Service = Service;
 class BviewCompletionItemProvider {
     constructor() {
-        this.tagReg = /<([\w-]+)\s+/g;
+        this.tagReg = /<([b][A-Z][\w]+)\s+/g;
         this.attrReg = /(?:\(|\s*)(\w+)=['"][^'"]*/;
-        this.tagStartReg = /<([\w-]*)$/;
-        this.pugTagStartReg = /^\s*[\w-]*$/;
+        this.tagStartReg = /<([b]*)$/;
+        this.pugTagStartReg = /^\s*[b]*$/;
     }
     getPreTag() {
         let line = this._position.line;
@@ -91,7 +91,7 @@ class BviewCompletionItemProvider {
                 txt = this._document.lineAt(line).text;
             }
             tag = this.matchTag(this.tagReg, txt, line);
-            if (tag === 'break') {
+            if (tag === "break") {
                 return;
             }
             if (tag) {
@@ -102,9 +102,9 @@ class BviewCompletionItemProvider {
         return;
     }
     getPreAttr() {
-        let txt = this.getTextBeforePosition(this._position).replace(/"[^'"]*(\s*)[^'"]*$/, '');
+        let txt = this.getTextBeforePosition(this._position).replace(/"[^'"]*(\s*)[^'"]*$/, "");
         let end = this._position.character;
-        let start = txt.lastIndexOf(' ', end) + 1;
+        let start = txt.lastIndexOf(" ", end) + 1;
         let parsedTxt = this._document.getText(new vscode_1.Range(this._position.line, start, this._position.line, end));
         return this.matchAttr(this.attrReg, parsedTxt);
     }
@@ -118,8 +118,9 @@ class BviewCompletionItemProvider {
         let arr = [];
         if (/<\/?[-\w]+[^<>]*>[\s\w]*<?\s*[\w-]*$/.test(txt) ||
             (this._position.line === line &&
-                (/^\s*[^<]+\s*>[^<\/>]*$/.test(txt) || /[^<>]*<$/.test(txt[txt.length - 1])))) {
-            return 'break';
+                (/^\s*[^<]+\s*>[^<\/>]*$/.test(txt) ||
+                    /[^<>]*<$/.test(txt[txt.length - 1])))) {
+            return "break";
         }
         while ((match = reg.exec(txt))) {
             arr.push({
@@ -159,14 +160,14 @@ class BviewCompletionItemProvider {
         let tagAttrs = this.getTagAttrs(tag);
         let preText = this.getTextBeforePosition(this._position);
         let prefix = preText
-            .replace(/['"]([^'"]*)['"]$/, '')
+            .replace(/['"]([^'"]*)['"]$/, "")
             .split(/\s|\(+/)
             .pop();
         // method attribute
-        const method = prefix[0] === '@';
+        const method = prefix[0] === "@";
         // bind attribute
-        const bind = prefix[0] === ':';
-        prefix = prefix.replace(/[:@]/, '');
+        const bind = prefix[0] === ":";
+        prefix = prefix.replace(/[:@]/, "");
         if (/[^@:a-zA-z\s]/.test(prefix[0])) {
             return suggestions;
         }
@@ -191,12 +192,12 @@ class BviewCompletionItemProvider {
         let index = 0;
         let that = this;
         function build(tag, { subtags, defaults }, snippets) {
-            let attrs = '';
+            let attrs = "";
             defaults &&
                 defaults.forEach((item, i) => {
                     attrs += ` ${item}=${that.quotes}$${index + i + 1}${that.quotes}`;
                 });
-            snippets.push(`${index > 0 ? '<' : ''}${tag}${attrs}>`);
+            snippets.push(`${index > 0 ? "<" : ""}${tag}${attrs}>`);
             index++;
             subtags && subtags.forEach((item) => build(item, TAGS[item], snippets));
             snippets.push(`</${tag}>`);
@@ -205,24 +206,28 @@ class BviewCompletionItemProvider {
         return {
             label: tag,
             sortText: `0${id}${tag}`,
-            insertText: new vscode_1.SnippetString(prettyHTML('<' + snippets.join(''), { indent_size: this.size }).substr(1)),
+            insertText: new vscode_1.SnippetString(prettyHTML("<" + snippets.join(""), { indent_size: this.size }).substr(1)),
             kind: vscode_1.CompletionItemKind.Snippet,
-            detail: 'bView',
+            detail: "bView",
             documentation: tagVal.description,
         };
     }
     buildAttrSuggestion({ attr, tag, bind, method }, { description, type, optionType, defaultValue }) {
-        if ((method && type === 'method') || (bind && type !== 'method') || (!method && !bind)) {
+        if ((method && type === "method") ||
+            (bind && type !== "method") ||
+            (!method && !bind)) {
             let documentation = description;
-            optionType && (documentation += '\n' + `type: ${optionType}`);
-            defaultValue && (documentation += '\n' + `default: ${defaultValue}`);
+            optionType && (documentation += "\n" + `type: ${optionType}`);
+            defaultValue && (documentation += "\n" + `default: ${defaultValue}`);
             return {
                 label: attr,
-                insertText: type && type === 'flag'
+                insertText: type && type === "flag"
                     ? `${attr} `
                     : new vscode_1.SnippetString(`${attr}=${this.quotes}$1${this.quotes}$0`),
-                kind: type && type === 'method' ? vscode_1.CompletionItemKind.Method : vscode_1.CompletionItemKind.Property,
-                detail: 'bView',
+                kind: type && type === "method"
+                    ? vscode_1.CompletionItemKind.Method
+                    : vscode_1.CompletionItemKind.Property,
+                detail: "bView",
                 documentation,
             };
         }
@@ -234,8 +239,8 @@ class BviewCompletionItemProvider {
         let attrItem = this.getAttrItem(tag, attr);
         let options = attrItem && attrItem.options;
         if (!options && attrItem) {
-            if (attrItem.type === 'boolean') {
-                options = ['true', 'false'];
+            if (attrItem.type === "boolean") {
+                options = ["true", "false"];
             }
         }
         return options || [];
@@ -244,7 +249,7 @@ class BviewCompletionItemProvider {
         return (TAGS[tag] && TAGS[tag].attributes) || [];
     }
     getAttrItem(tag, attr) {
-        return ATTRS[`${tag}/${attr}`] || ATTRS[attr];
+        return ui_attributes_1.default[`${tag}/${attr}`] || ui_attributes_1.default[attr];
     }
     isAttrValueStart(tag, attr) {
         return tag && attr;
@@ -276,9 +281,9 @@ class BviewCompletionItemProvider {
     provideCompletionItems(document, position, token) {
         this._document = document;
         this._position = position;
-        const config = vscode_1.workspace.getConfiguration('bview-helper');
-        this.size = config.get('indent-size');
-        const normalQuotes = config.get('quotes') === 'double' ? '"' : "'";
+        const config = vscode_1.workspace.getConfiguration("bview-helper");
+        this.size = config.get("indent-size");
+        const normalQuotes = config.get("quotes") === "double" ? '"' : "'";
         this.quotes = normalQuotes;
         let tag = this.getPreTag();
         let attr = this.getPreAttr();
@@ -290,9 +295,9 @@ class BviewCompletionItemProvider {
         }
         else if (this.isTagStart()) {
             switch (document.languageId) {
-                case 'vue':
+                case "vue":
                     return this.notInTemplate() ? [] : this.getTagSuggestion();
-                case 'html':
+                case "html":
                     // todo
                     return this.getTagSuggestion();
             }

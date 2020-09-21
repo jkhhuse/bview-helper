@@ -1,7 +1,15 @@
 {
     "bButton": {
         "defaults": ["type"],
-        "attributes": ["disabled", "ghost", "htmlType", "icon", "loading", "shape", "size", "type", "block"],
-        "description": "to trigger an operation"
+        "attributes": [
+            "type",
+            "size",
+            "loading",
+            "ghost",
+            "long",
+            "color",
+            "custom-icon"
+        ],
+        "description": "按钮"
     }
 }
